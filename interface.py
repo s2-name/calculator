@@ -15,6 +15,9 @@ class Ui_Window(object):
     def setupUi(self, Window):
         Window.setObjectName("Window")
         Window.resize(368, 326)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("calculator_14445.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        Window.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(Window)
         # self.centralwidget.setMaximumSize(QtCore.QSize(508, 498))
         self.centralwidget.setObjectName("centralwidget")
