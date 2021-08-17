@@ -6,6 +6,7 @@ current_expression = ""
 current_number = ""
 operator = ""
 first_number = 0
+isapoint = False
 
 
 class Window(QMainWindow, Ui_Window):
@@ -32,6 +33,8 @@ class Window(QMainWindow, Ui_Window):
         self.button_plus.pressed.connect(lambda: self.action('+'))
         self.button_eq.pressed.connect(lambda: self.equally())
         self.button_clear.pressed.connect(lambda: self.clear())
+        self.point.pressed.connect(lambda: self.addPoint())
+        self.back.pressed.connect(lambda: self.goBack())
 
     def refreshDisplay(self):
         if current_expression:
@@ -47,8 +50,9 @@ class Window(QMainWindow, Ui_Window):
         self.refreshDisplay()
 
     def action(self, oper):
-        global operator, first_number, current_expression, current_number
+        global operator, first_number, current_expression, current_number, isapoint
         if current_expression:
+            isapoint = False
             if operator:
                 if current_number:
                     self.equally()
@@ -64,7 +68,7 @@ class Window(QMainWindow, Ui_Window):
                 self.refreshDisplay()
 
     def equally(self):
-        global first_number, operator, current_number, current_expression
+        global first_number, operator, current_number, current_expression, isapoint
         if first_number and operator and current_number:
             first_number, current_number = float(first_number), float(current_number)
             if operator == "/" and current_number != 0:
@@ -78,15 +82,45 @@ class Window(QMainWindow, Ui_Window):
             current_expression = str(resl)
             current_number = str(resl)
             operator = ""
+            isapoint = True
             self.refreshDisplay()
 
     def clear(self):
-        global current_expression, current_number, first_number, operator
+        global current_expression, current_number, first_number, operator, isapoint
         current_number = ""
         current_expression = ""
         first_number = 0
         operator = ""
+        isapoint = False
         self.refreshDisplay()
+
+    def addPoint(self):
+        global isapoint, current_expression, current_number
+        if current_expression:
+            if not isapoint:
+                isapoint = True
+                current_expression = current_expression + '.'
+                current_number = current_number + '.'
+                self.refreshDisplay()
+
+    def goBack(self):
+        global current_expression, operator, current_number, isapoint
+        if current_expression:
+            if current_expression[-1] in ["+", "-", "*", "/"]:
+                operator = ""
+                current_expression = str(first_number)
+                current_number = str(first_number)
+            elif current_expression[-1] == '.':
+                isapoint = False
+                current_expression = current_expression[:-1]
+                current_number = current_number[:-1]
+            else:
+                current_expression = current_expression[:-1]
+                if current_number:
+                    current_number = current_number[:-1]
+            self.refreshDisplay()
+
+
 
     # Bind keys
     def keyPressEvent(self, e):
@@ -122,7 +156,7 @@ class Window(QMainWindow, Ui_Window):
         elif key in [16777221, 16777220]: #enter
             self.equally()
         elif key == 16777219: #backspace
-            self.clear()
+            self.goBack()
 
 
 
