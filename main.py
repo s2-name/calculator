@@ -96,7 +96,7 @@ class Window(QMainWindow, Ui_Window):
 
     def addPoint(self):
         global isapoint, current_expression, current_number
-        if current_expression:
+        if current_number:
             if not isapoint:
                 isapoint = True
                 current_expression = current_expression + '.'
@@ -125,6 +125,7 @@ class Window(QMainWindow, Ui_Window):
     # Bind keys
     def keyPressEvent(self, e):
         key = e.key()
+        # print(key)
         if key == 49:
             self.addNumber('1')
         elif key == 50:
@@ -157,6 +158,8 @@ class Window(QMainWindow, Ui_Window):
             self.equally()
         elif key == 16777219: #backspace
             self.goBack()
+        elif key == 46:
+            self.addPoint()
 
 
 
