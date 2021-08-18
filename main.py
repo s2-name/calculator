@@ -31,10 +31,12 @@ class Window(QMainWindow, Ui_Window):
         self.button_mul.pressed.connect(lambda: self.action('*'))
         self.button_minus.pressed.connect(lambda: self.action('-'))
         self.button_plus.pressed.connect(lambda: self.action('+'))
+        self.button_degree.pressed.connect(lambda: self.action('^'))
+        self.button_root.pressed.connect(lambda: self.action('√'))
         self.button_eq.pressed.connect(lambda: self.equally())
         self.button_clear.pressed.connect(lambda: self.clear())
-        self.point.pressed.connect(lambda: self.addPoint())
-        self.back.pressed.connect(lambda: self.goBack())
+        self.button_point.pressed.connect(lambda: self.addPoint())
+        self.button_back.pressed.connect(lambda: self.goBack())
 
     def refreshDisplay(self):
         if current_expression:
@@ -79,6 +81,10 @@ class Window(QMainWindow, Ui_Window):
                 resl = first_number + current_number
             elif operator == "-":
                 resl = first_number - current_number
+            elif operator == "^":
+                resl = first_number ** current_number
+            elif operator == "√" and first_number != 0:
+                resl = current_number ** (1/first_number)
             current_expression = str(resl)
             current_number = str(resl)
             operator = ""
@@ -154,12 +160,16 @@ class Window(QMainWindow, Ui_Window):
             self.action('-')
         elif key == 43:
             self.action('+')
+        elif key == 94:
+            self.action('^')
         elif key in [16777221, 16777220]: #enter
             self.equally()
         elif key == 16777219: #backspace
             self.goBack()
         elif key == 46:
             self.addPoint()
+        elif key == 67:
+            self.clear()
 
 
 
